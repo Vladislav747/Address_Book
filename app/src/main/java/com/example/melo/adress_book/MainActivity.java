@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 public class MainActivity extends Activity implements ContactListFragment.ContactListFragmentListener,
         DetailsFragment.DetailsFragmentListener,
@@ -80,6 +81,9 @@ public class MainActivity extends Activity implements ContactListFragment.Contac
         //Phone
 if(findViewById(R.id.fragmentContainer) != null)
     displayAddEditFragment(R.id.fragmentContainer, null);
+else
+    //Планшет
+        displayAddEditFragment(R.id.rightPaneContainer,null);
     }
 
 
@@ -93,8 +97,17 @@ if(findViewById(R.id.fragmentContainer) != null)
         // при смене ориентации экрана.
        // Вообщем это сохранённые данные, которые система для использует для
         // восстановления предыдущего состояния. Представляет собой набор пар ключ-значение.
+try {
+    Bundle arguments = new Bundle();
+}
+catch (Exception e){
 
+}
         Bundle arguments = new Bundle();
+if(arguments == null){
+    throw new IllegalArgumentException("Ошибка с Bundle аргументом он пустой!!");
+}
+
         arguments.putLong(ROW_ID, rowID);
         detailsFragment.setArguments(arguments);
 
