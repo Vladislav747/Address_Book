@@ -97,15 +97,11 @@ else
         // при смене ориентации экрана.
        // Вообщем это сохранённые данные, которые система для использует для
         // восстановления предыдущего состояния. Представляет собой набор пар ключ-значение.
-try {
-    Bundle arguments = new Bundle();
-}
-catch (Exception e){
 
-}
         Bundle arguments = new Bundle();
+//проверяю что arguments не пустой
 if(arguments == null){
-    throw new IllegalArgumentException("Ошибка с Bundle аргументом он пустой!!");
+    throw new IllegalArgumentException("Ошибка с Bundle аргументом он пустой!");
 }
 
         arguments.putLong(ROW_ID, rowID);
@@ -117,6 +113,41 @@ if(arguments == null){
         //Невозможно вытащить из backstack
         transaction.addToBackStack(null);
         transaction.commit(); // приводит к отображению DetailsFragment
+
+    }
+
+
+    //Отображение фрагмента для изменения или добавления контакта
+    private void displayAddEditFragment(int viewID, Bundle arguments){
+        AddEditFragment addEditFragment = new AddEditFragment();
+        //Если аргументы не отрицательны
+if (arguments != null){
+    addEditFragment.setArguments(arguments);
+
+    //Использование FragmentTransaction для отображения AddEditFragment
+    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+    transaction.replace(viewID, addEditFragment);
+    transaction.addToBackStack(null);
+    transaction.commit();
+
+}
+
+    }
+
+    //Влзврат к списку контактов  после удаления
+    private void onContactDeleted(){
+        //извлекает верхний элемент из стэка
+        getFragmentManager().popBackStack();
+        if (findViewById(R.id.fragmentContainer)== null){
+            contactListFragment.updateContactList();
+        }
+    }
+
+
+    //Отображение AddEditFragment для изменения существующего объекта
+    @Override
+    public void onEditContact(Bundle arguments){
+
 
     }
 

@@ -8,6 +8,9 @@ import android.app.ListFragment;
  */
 
 public class ContactListFragment extends ListFragment{
+    public void updateContactList() {
+    }
+
     // callback methods implemented by MainActivity
     public interface ContactListFragmentListener
     {
