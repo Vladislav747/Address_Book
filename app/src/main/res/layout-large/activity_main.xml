@@ -11,12 +11,10 @@
     android:paddingTop="@dimen/activity_vertical_margin">
     <FrameLayout
         android:id="@+id/contactListFragment"
-        android:name="com.deitel.addressbook.ContactListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        />
+        android:layout_marginRight="@dimen/activity_horizontal_margin" />
 <FrameLayout
     android:id="@+id/rightPaneContainer"
     android:layout_width="0dp"

@@ -79,9 +79,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@mipmap/Asset1">
-            /*android:text="@string/button_save_contact"*/
-        </Button>
+            android:background="@mipmap/asset1">
+           </Button>
     </GridLayout>
 
 </ScrollView>
