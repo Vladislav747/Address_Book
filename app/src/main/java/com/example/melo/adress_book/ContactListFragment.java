@@ -5,8 +5,10 @@ import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 
 /**
  * Created by Melo on 07.06.2018.
@@ -15,14 +17,17 @@ import android.widget.ListView;
 //Расширяет класс ListFragment для вывода списка контактов в компонете ListView, а также
     //предоставляет команду меню
     //для добавления нового контакта
-public class ContactListFragment extends ListFragment{
+
+
+
+    //Класс ListFragment используется потому что даннные отображаются в форме списка(List)
+public class ContactListFragment extends ListFragment {
     public void updateContactList() {
 
     }
 
     // callback methods implemented by MainActivity
-    public interface ContactListFragmentListener
-    {
+    public interface ContactListFragmentListener {
         // called when user selects a contact
         public void onContactSelected(long rowID);
 
@@ -33,8 +38,8 @@ public class ContactListFragment extends ListFragment{
 
     private ContactListFragmentListener listener;
 
-/* Перменная экземпляра  contactListView содержит ссылку на компонент ContactListFragment
-встроенный в ListView, по этой ссылке мы сможем взаимодействовать с ним*/
+    /* Перменная экземпляра  contactListView содержит ссылку на компонент ContactListFragment
+    встроенный в ListView, по этой ссылке мы сможем взаимодействовать с ним*/
     private ListView contactListView;
     /*Переменная contactAdapter содержит ссылку на объект CursorAdapter,
     * заполняющий компонент ListView приложения*/
@@ -80,12 +85,34 @@ public class ContactListFragment extends ListFragment{
         contactListView = getListView();
         //Назначаем обработчка на пункты меню
         contactListView.setOnItemClickListener(viewContactListener);
-// устанавливаем режим выбора пунктов списка  - выбор только одинарно
+// устанавливаем режим выбора пунктов списка  - выбор только один
         contactListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         //Имя контакта связывается с TextView в макете ListView;
-String[] from = new String[] {"name"};
-int[] to = new int[] {android.R.id.text1};
+        String[] from = new String[]{"name"};
+        int[] to = new int[]{android.R.id.text1};
+        //Связь с базой данных
+        //Здесь используется перменные from и to
+        //Субкласс SimpleCursorAdapter упрощающий связывание столбцы Cursor с компонентами
+        //TextView и ImagesView
+        //До этого массивы мы получили в переменных выше.
+        //В этом объекте с layoutом  simple_list_item_1
+        contactAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1,
+                null, from, to, 0); //Первый аргумент - это контекст, Третий аргумент - объект
+        //Cursor доступ к данным - передается null потому что объект передан позднее.,
+
+//Адаптер, поставляющий данные
+        //Устанавливаем этот адаптер
+        setListAdapter(contactAdapter);
     }
+
+    //Слушатель viewContactListener оповещает MainActivity о том, что пользователь коснулся контакта
+    //чтобы вывести подробную инфу В строке id передается методу  onContactSelected слушателя
+    AdapterView.OnItemClickListener viewContactListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            listener.onContactSelected(id);//Выбранный элемент передается MainActivity
+        }
+    };
 }
 
