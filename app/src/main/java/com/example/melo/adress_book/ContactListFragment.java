@@ -3,7 +3,10 @@ package com.example.melo.adress_book;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
+import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
@@ -114,5 +117,44 @@ public class ContactListFragment extends ListFragment {
             listener.onContactSelected(id);//Выбранный элемент передается MainActivity
         }
     };
+
+
+    //При возобновлении фрагмента задача GetContactsTask загружает контакты
+    @Override
+    public void onResume() {
+        super.onResume();
+new GetContactsTask.execute(Object[]) null);
+    }
+
+
+    //Выполнение запроса к базе данных вне потока GUI
+    private class GetContactsTask extends AsyncTask {
+DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            databaseConnector.open();
+            return databaseConnector.getAllContacts();
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            //Назначение курсора для адаптера
+            contactAdapter.changeCursor(o);
+            super.onPostExecute(o);
+        }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    //Обновление набора данных
+    public void updateContactList(){
+
+        new GetContactsTask().execute((Object[] null);
+    }
 }
 
