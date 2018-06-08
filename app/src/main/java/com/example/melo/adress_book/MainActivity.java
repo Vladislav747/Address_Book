@@ -135,30 +135,46 @@ if (arguments != null){
     }
 
     //Влзврат к списку контактов  после удаления
-    private void onContactDeleted(){
+    public void onContactDeleted(){
         //извлекает верхний элемент из стэка
         getFragmentManager().popBackStack();
         if (findViewById(R.id.fragmentContainer)== null){
+            //Вызывает метод updateContactList объекта contactListFragment
             contactListFragment.updateContactList();
         }
     }
 
 
     //Отображение AddEditFragment для изменения существующего объекта
+    /*Метод onEditContact из интерфейса AddEditFragment.AddEditFragmentListener*/
     @Override
     public void onEditContact(Bundle arguments){
-
+        //Arguments данные которые мы взяли из Bundle(Заполненных полей при вводе контакта)
+        if(findViewById(R.id.fragmentContainer) != null)//телефон
+            displayAddEditFragment(R.id.fragmentContainer, arguments);
+        else
+            //Планшет
+            displayAddEditFragment(R.id.rightPaneContainer,arguments);
 
     }
 
 
+    //Обновление GUI после сохранения нового или измененного контакта
+    //метод onAddEditCompleted из интерфейса AddEditFragment.AddEditFragmentListener
+    //вызывается объектом AddEditFragment для оповещения о том что пользователь
+    //сохраняет новый или изменяет существующий контакт
+    @Override
+    public void onAddEditCompleted(long rowID) {
+getFragmentManager().popBackStack(); //Извлечение из стека
+        //Планшет
+        if (findViewById(R.id.fragmentContainer) == null){
+            getFragmentManager().popBackStack(); //Извлечение из стека
+            contactListFragment.updateContactList(); //Обновление списка
 
-
-
-
-
-
-
+            //На планшете вывести добавленный и измененный контакт
+displayContact(rowID, R.id.rightPaneContainer);
+        }
+    }
 
 
 

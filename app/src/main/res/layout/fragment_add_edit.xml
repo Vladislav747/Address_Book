@@ -81,6 +81,14 @@
             android:layout_gravity="center_horizontal"
             android:background="@mipmap/asset1">
            </Button>
+
+        <Button
+            android:id="@+id/btnHui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@mipmap/asset1">
+        </Button>
     </GridLayout>
 
 </ScrollView>
