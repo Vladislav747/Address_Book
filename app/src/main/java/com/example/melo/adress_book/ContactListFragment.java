@@ -167,7 +167,7 @@ DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
     @Override
     public void onResume() {
         super.onResume();
-        new GetContactsTask.execute((Object[]) null);
+        new GetContactsTask().execute((Object[]) null);
     }
 
     @Override
