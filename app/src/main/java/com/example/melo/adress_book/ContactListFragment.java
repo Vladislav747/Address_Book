@@ -6,6 +6,8 @@ import android.app.ListFragment;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,9 +27,6 @@ import android.widget.SimpleCursorAdapter;
 
     //Класс ListFragment используется потому что даннные отображаются в форме списка(List)
 public class ContactListFragment extends ListFragment {
-    public void updateContactList() {
-
-    }
 
     // callback methods implemented by MainActivity
     public interface ContactListFragmentListener {
@@ -119,42 +118,75 @@ public class ContactListFragment extends ListFragment {
     };
 
 
-    //При возобновлении фрагмента задача GetContactsTask загружает контакты
+
+
+    // when fragment stops, close Cursor and remove from contactAdapter
     @Override
-    public void onResume() {
-        super.onResume();
-new GetContactsTask.execute(Object[]) null);
+    public void onStop() {
+        Cursor cursor = contactAdapter.getCursor(); // get current Cursor
+        contactAdapter.changeCursor(null); // adapter now has no Cursor
+
+        if (cursor != null)
+            cursor.close(); // release the Cursor's resources
+
+        super.onStop();
     }
+
+    //Отображение команд меню фрагмента
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_contact_list_menu,menu);
+    }
+
+    //Обработка выбора команды из меню
+
+
 
 
     //Выполнение запроса к базе данных вне потока GUI
-    private class GetContactsTask extends AsyncTask {
+    private class GetContactsTask extends AsyncTask<Object, Object, Cursor>  {
 DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
 
         @Override
-        protected Object doInBackground(Object[] objects) {
+        protected Cursor doInBackground(Object[] objects) {
             databaseConnector.open();
             return databaseConnector.getAllContacts();
         }
 
         @Override
-        protected void onPostExecute(Object o) {
+        protected void onPostExecute(Cursor result) {
             //Назначение курсора для адаптера
-            contactAdapter.changeCursor(o);
-            super.onPostExecute(o);
+            contactAdapter.changeCursor(result);
+            databaseConnector.close();
         }
     }
 
 
+    //При возобновлении фрагмента задача GetContactsTask загружает контакты
+    @Override
+    public void onResume() {
+        super.onResume();
+        new GetContactsTask.execute((Object[]) null);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        switch (item.getItemId())
+        {
+            case R.id.action_add:
+                listener.onAddContact();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item); // call super's method
+
     }
 
     //Обновление набора данных
     public void updateContactList(){
 
-        new GetContactsTask().execute((Object[] null);
+        new GetContactsTask().execute((Object[]) null);
     }
 }
 
