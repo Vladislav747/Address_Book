@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 /**
  * Created by Melo on 07.06.2018.
@@ -141,6 +142,20 @@ public class ContactListFragment extends ListFragment {
 
     //Обработка выбора команды из меню
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.action_add:
+                listener.onAddContact();
+                 return true;
+
+
+        }
+
+        return super.onOptionsItemSelected(item); // call super's method
+
+    }
 
 
 
@@ -170,18 +185,6 @@ DatabaseConnector databaseConnector = new DatabaseConnector(getActivity());
         new GetContactsTask().execute((Object[]) null);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
-            case R.id.action_add:
-                listener.onAddContact();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item); // call super's method
-
-    }
 
     //Обновление набора данных
     public void updateContactList(){

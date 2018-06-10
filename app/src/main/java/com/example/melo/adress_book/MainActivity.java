@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.widget.Toast;
 
-public class MainActivity extends Activity implements ContactListFragment.ContactListFragmentListener,
+public class MainActivity extends AppCompatActivity implements ContactListFragment.ContactListFragmentListener,
         DetailsFragment.DetailsFragmentListener,
         AddEditFragment.AddEditFragmentListener{
 
@@ -22,9 +23,9 @@ public class MainActivity extends Activity implements ContactListFragment.Contac
         setContentView(R.layout.activity_main);
         //Если активность восстанавливается, просто вернуть управление
         //заново создавать GUI не нужно
-        if(savedInstanceState != null)
+        if(savedInstanceState != null) {
             return;
-
+        }
         //Проверить содержит ли макет fragmentContainer (макет для телефона)
         //ContactListFragment отображается всегда
         if (findViewById(R.id.fragmentContainer) != null){
@@ -79,11 +80,14 @@ public class MainActivity extends Activity implements ContactListFragment.Contac
     public void onAddContact() {
         //Check that element is not empty
         //Phone
-if(findViewById(R.id.fragmentContainer) != null)
+if(findViewById(R.id.fragmentContainer) != null){
     displayAddEditFragment(R.id.fragmentContainer, null);
-else
+   }
+
+else {
     //Планшет
-        displayAddEditFragment(R.id.rightPaneContainer,null);
+    displayAddEditFragment(R.id.rightPaneContainer, null);
+}
     }
 
 
@@ -119,18 +123,23 @@ if(arguments == null){
 
     //Отображение фрагмента для изменения или добавления контакта
     private void displayAddEditFragment(int viewID, Bundle arguments){
-        AddEditFragment addEditFragment = new AddEditFragment();
-        //Если аргументы не отрицательны
-if (arguments != null){
-    addEditFragment.setArguments(arguments);
 
+        AddEditFragment addEditFragment = new AddEditFragment();
+
+
+        //Если аргументы не отрицательны
+        //Редактирование существующиего контакта
+if (arguments != null){
+
+    addEditFragment.setArguments(arguments);
+}
     //Использование FragmentTransaction для отображения AddEditFragment
     FragmentTransaction transaction = getFragmentManager().beginTransaction();
     transaction.replace(viewID, addEditFragment);
     transaction.addToBackStack(null);
     transaction.commit();
 
-}
+
 
     }
 
@@ -176,6 +185,11 @@ displayContact(rowID, R.id.rightPaneContainer);
         }
     }
 
-
-
+/*
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add("menu1");
+        return super.onCreateOptionsMenu(menu);
+    }
+    */
 }

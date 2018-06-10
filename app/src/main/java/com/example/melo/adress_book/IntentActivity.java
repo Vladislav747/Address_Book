@@ -9,7 +9,7 @@ import android.view.View;
 /**
  * Created by Melo on 08.06.2018.
  */
-
+/*
 public class IntentActivity extends AppCompatActivity implements View.OnClickListener {
 
 
@@ -26,3 +26,4 @@ public class IntentActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 }
+*/
